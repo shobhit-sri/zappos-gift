@@ -196,6 +196,7 @@ public class GiftZappos {
 
 	public static void main(String[] args) {
 		int noOfItems = 0;
+		int noOfCombos = 5;
 		Double dollarAmount = 140.0;
 		boolean validInput = false;
 		String strN = null;
@@ -237,53 +238,4 @@ public class GiftZappos {
 		List<String> categories = new ArrayList<>();
 		categories.add("Clothing"); 	//Default value
 		
-		//Calling getCategories() to populate Category dropdown.
-		try {
-			url = new URL("http://api.zappos.com/Search?key=" + key + "&includes=[%22facets%22]");
-			categories = gift.getCategories(url);
-		} catch (MalformedURLException e1) {
-			System.err.println("Malformed URL");
-		} catch (IOException e) {
-			System.err.println("Error Calling API");
-		}
-		
-		String category = (String)JOptionPane.showInputDialog(null, "Select Category (Cancel to exit):", "Categories", JOptionPane.PLAIN_MESSAGE, null, categories.toArray(), "Clothing");
-		if(category == null)
-			System.exit(0);
-		
-		//Calling getProductDetails()
-		try {
-			url = new URL("http://api.zappos.com/Search?term=" + category + "&key=" + key);
-			gift.getProductDetails(url);
-		} catch (MalformedURLException e) {
-			System.err.println("Malformed URL");
-		} catch (IOException e) {
-			System.err.println("Error Calling API");
-			e.printStackTrace();
-		}
-
-		
-		List<String> itemList = new ArrayList<>();
-		itemList.addAll(gift.availItems);
-		
-		//Calling makeCombo to form product combinations
-		System.out.println("*** Making Combos ***");
-		Set<Set<String>> itemCombos = makeCombo(itemList, noOfItems);
-		
-		//Calling makeList to convert Set of Set of combos to List of combos
-		gift.makeList(itemCombos);
-		
-		//Calling calcPriceCombo to populate comboPrice and closeness lists
-		gift.calcPriceCombo();
-		
-		//Finding indices of closest combinations
-		List<Integer> indices = gift.getClosestIndices(noOfItems);
-		
-		//Based on indices printing combinations and prices
-		for (Integer index : indices) {
-			System.out.println(gift.comboList.get(index).replaceAll("#", ",").substring(0, gift.comboList.get(index).length() - 1)
-					+ ": "
-					+ gift.comboPrice.get(index));
-		}
-	}
-}
+		//Calling getCategories() to populate
